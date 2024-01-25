@@ -21,7 +21,7 @@ build_project_for_release:
 	cargo build --release
 
 run_project:
-	cargo run -- --rlfile skillset.rl --outputfile result.als
+	cargo run -- --file files/skillset.rl --out files/result.als
 
 clean_project:
 	cargo clean

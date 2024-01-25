@@ -9,10 +9,10 @@ use std::fs;
 struct Args {
     /// robot language file
     #[arg(short, long)]
-    rlfile: String,
+    file: String,
     /// result file
     #[arg(short, long)]
-    outputfile: String,
+    out: String,
     /// verbose level
     #[arg(short, long, default_value_t = 1)]
     verbose: u8,
@@ -27,7 +27,7 @@ fn main() {
         env_logger::init();
     }
     //
-    if let Ok(model) = load_model(&args.rlfile) {
+    if let Ok(model) = load_model(&args.file) {
         if args.verbose >= 3 {
             println!("\n--------------------------------------------------\n");
             println!("{}", model);
@@ -39,6 +39,6 @@ fn main() {
 
         let alloy = to_alloy(&model);
         // println!("{}", alloy);
-        let _ = fs::write(&args.outputfile, alloy);
+        let _ = fs::write(&args.out, alloy);
     }
 }
