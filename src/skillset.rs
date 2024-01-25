@@ -1,5 +1,6 @@
 use super::*;
-use heck::{ToSnakeCase, ToUpperCamelCase};
+pub use naming::*;
+pub use expression_converter::*;
 
 
 pub fn skillsets_to_alloy(model: &Model) -> String {
@@ -25,29 +26,17 @@ pub fn skillset_to_alloy(skillset: &Skillset) -> String {
 
 
 
-pub fn skillset_enum(skillset: &Skillset) -> String {
-    format!(
-        "{}_states",
-        skillset.name().to_upper_camel_case()
-    )
-}
 
-pub fn skillset_var(skillset: &Skillset) -> String {
-    format!(
-        "{}_state",
-        skillset.name().to_snake_case()
-    )
-}
 
 
 pub fn skillset_content_to_alloy(skillset: &Skillset) -> String {
     let mut out = "".to_string();
 
-    out += "// ==================== Skillset ====================\n";
+    out += "\n// ==================== Skillset ====================\n";
 
     // Enum
     out += &format!("\nenum {} {{", skillset_enum(skillset));
-    out += "Free, Lock }\n";
+    out += "Free, Lock}\n";
     
     // Var
     out += &format!(
@@ -59,21 +48,65 @@ pub fn skillset_content_to_alloy(skillset: &Skillset) -> String {
 
     // Init
     out += &format!(
-        "\nfact {}_initial_state {{\n",
-        skillset.name().to_upper_camel_case()
+        "\nfact {}_initial_state {{",
+        skillset_fact_pred_name(skillset)
     );
     out += &format!(
-        "{} = {{Free}}",
+        "{} = Free",
         skillset_var(skillset)
     );
-    out += "\n}\n";
+    out += "}\n\n";
     
-    // // Trans
-    // for skill in skillset.skills() {
-    //     for inv: &Invariant in skill.invariants() {
-    //         // TODO
-    //     }
-    // }
+    // Trans
+    for skill in skillset.skills() {
+        let invariants = skill.invariants();
+        for ind in 0..invariants.len() {
+            let invariant = &invariants[ind];
+            out += &format!(
+                "pred Check_{}_{} {{",
+                skill_fact_pred_name(skillset, skill),
+                invariant.name()
+            );
+            out += &format!(
+                "{} = Lock and {} = Running and ",
+                skillset_var(skillset),
+                skill_var(skillset, skill)
+            );
+            for ind_2 in 0..ind {
+                out += &format!(
+                    "{} and ",
+                    get_alloy_formula(invariants[ind_2].guard())
+                );
+            }
+            out += &format!(
+                "!{} and ",
+                get_alloy_formula(invariants[ind].guard())
+            );
+            for effect in invariants[ind].effects() {
+                let resource = skillset.get_resource(effect.resource().resolved());
+                out += &format!(
+                    "{}' = {} and ",
+                    resource.expect("Some").name(),
+                    resource.expect("Some").get_state(effect.state().resolved()).expect("Some").name()
+                );
+            }
+            out += &format!(
+                "{}' = Idle and ",
+                skill_var(skillset, skill)
+            );
+            for skill_2 in skillset.skills() {
+                if skill.id() != skill_2.id() {
+                    out += &format!(
+                        "{}' = {} and ",
+                        skill_var(skillset, skill_2),
+                        skill_var(skillset, skill_2)
+                    );
+                }
+            }
+
+            out += "}\n";
+        }
+    }
 
     out
 }

@@ -1,35 +1,11 @@
 use super::*;
-use heck::{ToSnakeCase, ToUpperCamelCase};
+pub use naming::*;
 
-
-pub fn resource_enum(skillset: &Skillset, resource: &Resource) -> String {
-    format!(
-        "{}_{}",
-        skillset.name().to_upper_camel_case(),
-        resource.name().to_upper_camel_case()
-    )
-}
-
-pub fn resource_state(skillset: &Skillset, state: &State) -> String {
-    format!(
-        "{}_{}",
-        skillset.name().to_upper_camel_case(),
-        state.name().to_upper_camel_case()
-    )
-}
-
-pub fn resource_var(skillset: &Skillset, resource: &Resource) -> String {
-    format!(
-        "{}_{}",
-        skillset.name().to_snake_case(),
-        resource.name().to_snake_case()
-    )
-}
 
 pub fn resources_to_alloy(skillset: &Skillset) -> String {
     let mut out = "".to_string();
 
-    out += "// ==================== Resouces ====================\n";
+    out += "\n// ==================== Resouces ====================\n";
     for resource in skillset.resources() {
         // Enum
         out += &format!("\nenum {} {{", resource_enum(skillset, resource));
@@ -51,7 +27,7 @@ pub fn resources_to_alloy(skillset: &Skillset) -> String {
         
         // Init
         out += &format!(
-        "\nfact {}_initial_state {{\n",
+        "\nfact {}_initial_state {{",
         resource_enum(skillset, resource)
         );
         out += &format!(
@@ -59,7 +35,7 @@ pub fn resources_to_alloy(skillset: &Skillset) -> String {
             resource_var(skillset, resource),
             resource_state(skillset, resource.states().first().unwrap())
         );
-        out += "\n}\n";
+        out += "}\n";
     }
 
     out

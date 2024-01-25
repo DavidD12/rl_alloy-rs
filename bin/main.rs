@@ -2,13 +2,17 @@ use clap::Parser;
 use rl_alloy::to_alloy;
 use rl_model::*;
 use std::env;
+use std::fs;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
     /// robot language file
     #[arg(short, long)]
-    file: String,
+    rlfile: String,
+    /// result file
+    #[arg(short, long)]
+    outputfile: String,
     /// verbose level
     #[arg(short, long, default_value_t = 1)]
     verbose: u8,
@@ -23,7 +27,7 @@ fn main() {
         env_logger::init();
     }
     //
-    if let Ok(model) = load_model(&args.file) {
+    if let Ok(model) = load_model(&args.rlfile) {
         if args.verbose >= 3 {
             println!("\n--------------------------------------------------\n");
             println!("{}", model);
@@ -34,6 +38,7 @@ fn main() {
         }
 
         let alloy = to_alloy(&model);
-        println!("{}", alloy);
+        // println!("{}", alloy);
+        let _ = fs::write(&args.outputfile, alloy);
     }
 }

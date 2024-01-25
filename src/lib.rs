@@ -10,13 +10,16 @@ pub mod validate;
 pub use validate::*;
 
 pub mod event;
-pub use event::*;
 
 pub mod skill;
-pub use skill::*;
+
+pub mod naming;
+
+pub mod expression_converter;
+
 
 pub fn to_alloy(model: &Model) -> String {
-    let mut out = "module skillset_verif".to_string();
+    let mut out = "module skillset_verif\n".to_string();
 
     out += &skillsets_to_alloy(model);
 
