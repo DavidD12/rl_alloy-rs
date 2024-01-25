@@ -1,7 +1,6 @@
 use super::*;
-pub use naming::*;
 pub use expression_converter::*;
-
+pub use naming::*;
 
 pub fn skillsets_to_alloy(model: &Model) -> String {
     let mut out = "".to_string();
@@ -23,12 +22,6 @@ pub fn skillset_to_alloy(skillset: &Skillset) -> String {
     out
 }
 
-
-
-
-
-
-
 pub fn skillset_content_to_alloy(skillset: &Skillset) -> String {
     let mut out = "".to_string();
 
@@ -37,7 +30,7 @@ pub fn skillset_content_to_alloy(skillset: &Skillset) -> String {
     // Enum
     out += &format!("\nenum {} {{", skillset_enum(skillset));
     out += "Free, Lock}\n";
-    
+
     // Var
     out += &format!(
         "var one sig {} in {} {{",
@@ -51,12 +44,9 @@ pub fn skillset_content_to_alloy(skillset: &Skillset) -> String {
         "\nfact {}_initial_state {{",
         skillset_fact_pred_name(skillset)
     );
-    out += &format!(
-        "{} = Free",
-        skillset_var(skillset)
-    );
+    out += &format!("{} = Free", skillset_var(skillset));
     out += "}\n\n";
-    
+
     // Trans
     for skill in skillset.skills() {
         let invariants = skill.invariants();
@@ -75,25 +65,26 @@ pub fn skillset_content_to_alloy(skillset: &Skillset) -> String {
             for ind_2 in 0..ind {
                 out += &format!(
                     "{} and ",
-                    get_alloy_formula(invariants[ind_2].guard())
+                    get_alloy_formula(skillset, invariants[ind_2].guard())
                 );
             }
             out += &format!(
                 "!{} and ",
-                get_alloy_formula(invariants[ind].guard())
+                get_alloy_formula(skillset, invariants[ind].guard())
             );
             for effect in invariants[ind].effects() {
                 let resource = skillset.get_resource(effect.resource().resolved());
                 out += &format!(
                     "{}' = {} and ",
                     resource.expect("Some").name(),
-                    resource.expect("Some").get_state(effect.state().resolved()).expect("Some").name()
+                    resource
+                        .expect("Some")
+                        .get_state(effect.state().resolved())
+                        .expect("Some")
+                        .name()
                 );
             }
-            out += &format!(
-                "{}' = Idle and ",
-                skill_var(skillset, skill)
-            );
+            out += &format!("{}' = Idle and ", skill_var(skillset, skill));
             for skill_2 in skillset.skills() {
                 if skill.id() != skill_2.id() {
                     out += &format!(
