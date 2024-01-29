@@ -1,19 +1,4 @@
 
-update:
-	rustup update
-
-compile:
-	rustc file.rs
-
-format:
-	rustfmt file.rs
-
-uninstall:
-	# rustup self uninstall
-
-create_projetc:
-	cargo new my_project_name
-
 build_project:
 	cargo build
 

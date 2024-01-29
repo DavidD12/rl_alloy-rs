@@ -1,6 +1,5 @@
 use super::*;
-pub use naming::*;
-
+use naming::*;
 
 pub fn resources_to_alloy(skillset: &Skillset) -> String {
     let mut out = "".to_string();
@@ -24,11 +23,11 @@ pub fn resources_to_alloy(skillset: &Skillset) -> String {
             resource_enum(skillset, resource)
         );
         out += "}\n";
-        
+
         // Init
         out += &format!(
-        "\nfact {}_initial_state {{",
-        resource_enum(skillset, resource)
+            "\nfact {}_initial_state {{",
+            resource_enum(skillset, resource)
         );
         out += &format!(
             "{} = {}",
