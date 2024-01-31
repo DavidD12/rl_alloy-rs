@@ -16,7 +16,6 @@ pub fn skillset_to_alloy(skillset: &Skillset) -> String {
     let mut out = "".to_string();
 
     out += &resources_to_alloy(skillset);
-    out += &validates_to_alloy(skillset);
     out += &skillset_content_to_alloy(skillset);
     out += &events_to_alloy(skillset);
     out += &skills_to_alloy(skillset);
@@ -129,6 +128,7 @@ pub fn skillset_content_to_alloy(skillset: &Skillset) -> String {
             out += "}\n";
         }
     }
+    out += "\n";
     for skill in skillset.skills() {
         out += &format!(
             "pred {}_inva_false_while_run {{",
@@ -184,7 +184,7 @@ pub fn skillset_content_to_alloy(skillset: &Skillset) -> String {
         out += ")) and ";
     }
     out.truncate(out.len() - " and ".len()); // To remove the last "and" statement
-    out += ")}\n";
+    out += ")}\n\n";
 
     out += &format!("pred {}_lock_to_free {{", skillset_fact_pred_name(skillset));
     out += &format!(

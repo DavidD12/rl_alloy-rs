@@ -4,7 +4,7 @@ use naming::*;
 pub fn events_to_alloy(skillset: &Skillset) -> String {
     let mut out = "".to_string();
 
-    out += "\n// ==================== Events ====================\n";
+    out += "\n// ==================== Events ====================\n\n";
 
     for event in skillset.events() {
         out += &format!("pred {} {{", event_fact_pred_name(skillset, event));

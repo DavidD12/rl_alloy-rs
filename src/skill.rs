@@ -10,7 +10,7 @@ pub fn skills_to_alloy(skillset: &Skillset) -> String {
     // Enum
     out += &format!("\nenum {} {{", skill_enum(skillset));
     out += &format!(
-        "{}, {}, {}}}\n",
+        "{}, {}, {}}}\n\n",
         skill_state(skillset, "idle"),
         skill_state(skillset, "running"),
         skill_state(skillset, "inter")
@@ -28,7 +28,7 @@ pub fn skills_to_alloy(skillset: &Skillset) -> String {
 
     // Init
     out += &format!(
-        "\n\nfact {}_skill_initial_state {{",
+        "\nfact {}_skill_initial_state {{",
         skillset_fact_pred_name(skillset)
     );
     for skill in skillset.skills() {
@@ -366,7 +366,7 @@ pub fn inte_to_idle_to_alloy(skillset: &Skillset, skill: &Skill) -> String {
         skillset_var(skillset),
         skillset_state(skillset, "free"),
         skill_var(skillset, skill),
-        skill_state(skillset, "interr")
+        skill_state(skillset, "inter")
     );
 
     let mut used_resources = Vec::new();

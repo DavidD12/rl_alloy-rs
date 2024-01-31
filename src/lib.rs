@@ -6,9 +6,6 @@ pub use skillset::*;
 pub mod resource;
 pub use resource::*;
 
-pub mod validate;
-pub use validate::*;
-
 pub mod event;
 pub use event::*;
 
