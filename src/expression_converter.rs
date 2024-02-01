@@ -3,8 +3,6 @@ use naming::*;
 use rl_model::model::expr::Expr;
 
 pub fn get_alloy_formula(skillset: &Skillset, expr: &Expr) -> String {
-    // let out = " TODO ".to_string();
-    // out
     match expr {
         Expr::True => "{}".to_string(),
         Expr::False => "not {}".to_string(),
@@ -13,7 +11,7 @@ pub fn get_alloy_formula(skillset: &Skillset, expr: &Expr) -> String {
             let resource = skillset.get(id.resolved()).unwrap();
             let state = skillset.get(state.resolved()).unwrap();
             format!(
-                "{} = {}",
+                "({} = {})",
                 resource_var(skillset, resource),
                 resource_state(skillset, state)
             )
@@ -23,7 +21,7 @@ pub fn get_alloy_formula(skillset: &Skillset, expr: &Expr) -> String {
             let resource = skillset.get(id.resolved()).unwrap();
             let state = skillset.get(state.resolved()).unwrap();
             format!(
-                "{} != {}",
+                "({} != {})",
                 resource_var(skillset, resource),
                 resource_state(skillset, state)
             )
@@ -31,17 +29,17 @@ pub fn get_alloy_formula(skillset: &Skillset, expr: &Expr) -> String {
 
         Expr::Not(a) => format!("!({})", get_alloy_formula(skillset, a)),
         Expr::And(a, b) => format!(
-            "({}) and ({})",
+            "(({}) and ({}))",
             get_alloy_formula(skillset, a),
             get_alloy_formula(skillset, b)
         ),
         Expr::Or(a, b) => format!(
-            "({}) or ({})",
+            "(({}) or ({}))",
             get_alloy_formula(skillset, a),
             get_alloy_formula(skillset, b)
         ),
         Expr::Implies(a, b) => format!(
-            "({}) implies ({})",
+            "(({}) implies ({}))",
             get_alloy_formula(skillset, a),
             get_alloy_formula(skillset, b)
         ),

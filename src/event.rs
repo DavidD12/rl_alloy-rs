@@ -1,4 +1,5 @@
 use super::*;
+use expression_converter::*;
 use naming::*;
 
 pub fn events_to_alloy(skillset: &Skillset) -> String {
@@ -12,6 +13,10 @@ pub fn events_to_alloy(skillset: &Skillset) -> String {
             "{} = {} and ",
             skillset_var(skillset),
             skillset_state(skillset, "free")
+        );
+        out += &format!(
+            "{} and ",
+            get_alloy_formula(skillset, &(event.guard().clone().unwrap()))
         );
         let mut used_resources = Vec::new();
         for effect in event.effects() {

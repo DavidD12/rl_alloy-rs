@@ -7,7 +7,7 @@ pub fn running_constraint_to_alloy(skillset: &Skillset) -> String {
     out += "\n// ==================== Running constraint ====================\n\n";
 
     // The enum
-    out += &format!("enum Conc_event {{");
+    out += &format!("enum {}_conc_event {{", skillset_fact_pred_name(skillset));
     out += &format!(
         "\n\t{}_lock_to_free_event,\n",
         skillset_fact_pred_name(skillset)
@@ -61,7 +61,8 @@ pub fn running_constraint_to_alloy(skillset: &Skillset) -> String {
 
     // The transition functions
     out += &format!(
-        "fun is_event_{}_lock_to_free : set Conc_event {{\n\t{}_lock_to_free implies {{{}_lock_to_free_event}} else none\n}}\n",
+        "fun is_event_{}_lock_to_free : set {}_conc_event {{\n\t{}_lock_to_free implies {{{}_lock_to_free_event}} else none\n}}\n",
+        skillset_fact_pred_name(skillset),
         skillset_fact_pred_name(skillset),
         skillset_fact_pred_name(skillset),
         skillset_fact_pred_name(skillset)
@@ -69,9 +70,10 @@ pub fn running_constraint_to_alloy(skillset: &Skillset) -> String {
     for skill in skillset.skills() {
         for invariant in skill.invariants() {
             out += &format!(
-                "fun is_event_Check_{}_{} : set Conc_event {{\n\tCheck_{}_{} implies {{Check_{}_{}_event}} else none\n}}\n",
+                "fun is_event_Check_{}_{} : set {}_conc_event {{\n\tCheck_{}_{} implies {{Check_{}_{}_event}} else none\n}}\n",
                 skill_fact_pred_name(skillset, skill),
                 invariant.name(),
+                skillset_fact_pred_name(skillset),
                 skill_fact_pred_name(skillset, skill),
                 invariant.name(),
                 skill_fact_pred_name(skillset, skill),
@@ -81,8 +83,9 @@ pub fn running_constraint_to_alloy(skillset: &Skillset) -> String {
     }
     for event in skillset.events() {
         out += &format!(
-            "fun is_event_{} : set Conc_event {{\n\t{} implies {{{}_event}} else none\n}}\n",
+            "fun is_event_{} : set {}_conc_event {{\n\t{} implies {{{}_event}} else none\n}}\n",
             event_fact_pred_name(skillset, event),
+            skillset_fact_pred_name(skillset),
             event_fact_pred_name(skillset, event),
             event_fact_pred_name(skillset, event)
         );
@@ -90,34 +93,39 @@ pub fn running_constraint_to_alloy(skillset: &Skillset) -> String {
 
     for skill in skillset.skills() {
         out += &format!(
-            "fun is_event_{}_idle_to_idle : set Conc_event {{\n\t{}_idle_to_idle implies {{{}_idle_to_idle_event}} else none\n}}\n",
+            "fun is_event_{}_idle_to_idle : set {}_conc_event {{\n\t{}_idle_to_idle implies {{{}_idle_to_idle_event}} else none\n}}\n",
             skill_fact_pred_name(skillset, skill),
-            skill_fact_pred_name(skillset, skill),
-            skill_fact_pred_name(skillset, skill)
-        );
-        out += &format!(
-            "fun is_event_{}_idle_to_runn : set Conc_event {{\n\t{}_idle_to_runn implies {{{}_idle_to_runn_event}} else none\n}}\n",
-            skill_fact_pred_name(skillset, skill),
+            skillset_fact_pred_name(skillset),
             skill_fact_pred_name(skillset, skill),
             skill_fact_pred_name(skillset, skill)
         );
         out += &format!(
-            "fun is_event_{}_runn_to_inte : set Conc_event {{\n\t{}_runn_to_inte implies {{{}_runn_to_inte_event}} else none\n}}\n",
+            "fun is_event_{}_idle_to_runn : set {}_conc_event {{\n\t{}_idle_to_runn implies {{{}_idle_to_runn_event}} else none\n}}\n",
             skill_fact_pred_name(skillset, skill),
+            skillset_fact_pred_name(skillset),
             skill_fact_pred_name(skillset, skill),
             skill_fact_pred_name(skillset, skill)
         );
         out += &format!(
-            "fun is_event_{}_inte_to_idle : set Conc_event {{\n\t{}_inte_to_idle implies {{{}_inte_to_idle_event}} else none\n}}\n",
+            "fun is_event_{}_runn_to_inte : set {}_conc_event {{\n\t{}_runn_to_inte implies {{{}_runn_to_inte_event}} else none\n}}\n",
             skill_fact_pred_name(skillset, skill),
+            skillset_fact_pred_name(skillset),
+            skill_fact_pred_name(skillset, skill),
+            skill_fact_pred_name(skillset, skill)
+        );
+        out += &format!(
+            "fun is_event_{}_inte_to_idle : set {}_conc_event {{\n\t{}_inte_to_idle implies {{{}_inte_to_idle_event}} else none\n}}\n",
+            skill_fact_pred_name(skillset, skill),
+            skillset_fact_pred_name(skillset),
             skill_fact_pred_name(skillset, skill),
             skill_fact_pred_name(skillset, skill)
         );
         for success in skill.successes() {
             out += &format!(
-                "fun is_event_{}_runn_to_{} : set Conc_event {{\n\t{}_runn_to_{} implies {{{}_runn_to_{}_event}} else none\n}}\n",
+                "fun is_event_{}_runn_to_{} : set {}_conc_event {{\n\t{}_runn_to_{} implies {{{}_runn_to_{}_event}} else none\n}}\n",
                 skill_fact_pred_name(skillset, skill),
                 success_pred_name(success),
+                skillset_fact_pred_name(skillset),
                 skill_fact_pred_name(skillset, skill),
                 success_pred_name(success),
                 skill_fact_pred_name(skillset, skill),
@@ -126,9 +134,10 @@ pub fn running_constraint_to_alloy(skillset: &Skillset) -> String {
         }
         for fail in skill.failures() {
             out += &format!(
-                "fun is_event_{}_runn_to_{} : set Conc_event {{\n\t{}_runn_to_{} implies {{{}_runn_to_{}_event}} else none\n}}\n",
+                "fun is_event_{}_runn_to_{} : set {}_conc_event {{\n\t{}_runn_to_{} implies {{{}_runn_to_{}_event}} else none\n}}\n",
                 skill_fact_pred_name(skillset, skill),
                 failure_pred_name(fail),
+                skillset_fact_pred_name(skillset),
                 skill_fact_pred_name(skillset, skill),
                 failure_pred_name(fail),
                 skill_fact_pred_name(skillset, skill),
@@ -138,7 +147,11 @@ pub fn running_constraint_to_alloy(skillset: &Skillset) -> String {
     }
 
     // The union function
-    out += &format!("\nfun event_union : set Conc_event {{");
+    out += &format!(
+        "\nfun {}_event_union : set {}_conc_event {{",
+        skillset_fact_pred_name(skillset),
+        skillset_fact_pred_name(skillset)
+    );
     out += &format!(
         "\n\tis_event_{}_lock_to_free +\n",
         skillset_fact_pred_name(skillset)
@@ -191,7 +204,11 @@ pub fn running_constraint_to_alloy(skillset: &Skillset) -> String {
     out += "\n}\n\n";
 
     // The constraint fact
-    out += "\nfact always_some_event { always some event_union }\n";
+    out += &format!(
+        "\nfact {}_always_some_event {{ always some {}_event_union }}\n",
+        skillset_fact_pred_name(skillset),
+        skillset_fact_pred_name(skillset),
+    );
 
     out
 }
