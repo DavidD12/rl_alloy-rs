@@ -19,7 +19,7 @@ skillset custom_robot {
         }
 
         motion {
-            state { Off On }
+            state { On Off }
             initial Off
             transition {
                 On -> Off

@@ -32,7 +32,7 @@ pub fn resources_to_alloy(skillset: &Skillset) -> String {
         out += &format!(
             "{} = {}",
             resource_var(skillset, resource),
-            resource_state(skillset, resource.initial()) // states().first().unwrap()
+            resource_state(skillset, skillset.get(resource.initial()).unwrap()) // states().first().unwrap()
         );
         out += "}\n";
     }
