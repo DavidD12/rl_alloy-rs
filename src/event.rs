@@ -3,7 +3,7 @@ use expression_converter::*;
 use naming::*;
 
 pub fn events_to_alloy(skillset: &Skillset) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     out += "\n// ==================== Events ====================\n\n";
 

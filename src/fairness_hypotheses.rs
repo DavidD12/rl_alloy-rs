@@ -6,7 +6,7 @@ pub fn generic_fairness_hypotheses_to_alloy(
     pred_fairness_name: &str,
     skill_state_name: &str,
 ) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     for skill in skillset.skills() {
         out += &format!(
@@ -38,7 +38,7 @@ pub fn generic_fairness_hypotheses_to_alloy(
 }
 
 pub fn fairness_hypotheses_to_alloy(skillset: &Skillset) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     out += "\n// ==================== Fairness hypotheses ====================\n\n";
 

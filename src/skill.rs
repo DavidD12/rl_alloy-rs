@@ -3,7 +3,7 @@ use expression_converter::*;
 use naming::*;
 
 pub fn skills_to_alloy(skillset: &Skillset) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     out += "\n// ==================== Skills ====================\n";
 
@@ -64,7 +64,7 @@ pub fn skills_to_alloy(skillset: &Skillset) -> String {
 }
 
 pub fn idle_to_idle_to_alloy(skillset: &Skillset, skill: &Skill) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     out += &format!(
         "pred {}_idle_to_idle {{",
@@ -118,7 +118,7 @@ pub fn idle_to_idle_to_alloy(skillset: &Skillset, skill: &Skill) -> String {
 }
 
 pub fn idle_to_runn_to_alloy(skillset: &Skillset, skill: &Skill) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     out += &format!(
         "pred {}_idle_to_runn {{",
@@ -185,7 +185,7 @@ pub fn idle_to_runn_to_alloy(skillset: &Skillset, skill: &Skill) -> String {
 }
 
 pub fn runn_to_inte_to_alloy(skillset: &Skillset, skill: &Skill) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     out += &format!(
         "pred {}_runn_to_inte {{",
@@ -231,7 +231,7 @@ pub fn runn_to_inte_to_alloy(skillset: &Skillset, skill: &Skill) -> String {
 }
 
 pub fn runn_to_succ_to_alloy(skillset: &Skillset, skill: &Skill) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     for success in skill.successes() {
         out += &format!(
@@ -293,7 +293,7 @@ pub fn runn_to_succ_to_alloy(skillset: &Skillset, skill: &Skill) -> String {
 }
 
 pub fn runn_to_fail_to_alloy(skillset: &Skillset, skill: &Skill) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     for fail in skill.failures() {
         out += &format!(
@@ -355,7 +355,7 @@ pub fn runn_to_fail_to_alloy(skillset: &Skillset, skill: &Skill) -> String {
 }
 
 pub fn inte_to_idle_to_alloy(skillset: &Skillset, skill: &Skill) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     out += &format!(
         "pred {}_inte_to_idle {{",

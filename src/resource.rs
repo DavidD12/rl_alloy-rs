@@ -2,7 +2,7 @@ use super::*;
 use naming::*;
 
 pub fn resources_to_alloy(skillset: &Skillset) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     out += "\n// ==================== Resouces ====================\n";
     for resource in skillset.resources() {

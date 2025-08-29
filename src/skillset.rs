@@ -3,7 +3,7 @@ use expression_converter::*;
 use naming::*;
 
 pub fn skillsets_to_alloy(model: &Model) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     for skillset in model.skillsets() {
         out += &skillset_to_alloy(skillset);
@@ -13,7 +13,7 @@ pub fn skillsets_to_alloy(model: &Model) -> String {
 }
 
 pub fn skillset_to_alloy(skillset: &Skillset) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     out += &resources_to_alloy(skillset);
     out += &skillset_content_to_alloy(skillset);
@@ -26,7 +26,7 @@ pub fn skillset_to_alloy(skillset: &Skillset) -> String {
 }
 
 pub fn skillset_content_to_alloy(skillset: &Skillset) -> String {
-    let mut out = "".to_string();
+    let mut out = String::new();
 
     out += "\n// ==================== Skillset ====================\n";
 
